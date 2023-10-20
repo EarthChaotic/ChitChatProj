@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
@@ -13,6 +14,7 @@ app.listen(PORT, () => {
   });
 //Check if API Is Up
 
+app.use(cors());
 app.use(express.json());
 app.use('/users',userRouter);
 //API Goes Here
