@@ -1,40 +1,18 @@
-//Import and Declare
-const mysql = require("mysql2");
 const express = require("express");
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
-var userRouter = require("./routes/users");
+var userRouter = require('./routes/users');
+
+const db = require("./database/index")
+db.sequelize.sync();
 //Import and Declare
 
-//Reminder
 app.listen(PORT, () => {
-  console.log(`Server Running on http://localhost:${PORT}`);
-});
-//Reminder
+    console.log(`Server Running on http://localhost:${PORT}`);
+  });
+//Check if API Is Up
 
-//MySQL Connect
-const connection = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "password",
-  database: "chitchat",
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.error("Error connecting to the database: " + err.message);
-    return;
-  }
-  console.log("Connected to the database");
-});
-
-//MySQL Connect
-
+app.use(express.json());
+app.use('/users',userRouter);
 //API Goes Here
-
-app.use("/users", userRouter);
-
-//API Goes Here
-
-module.exports = app;
