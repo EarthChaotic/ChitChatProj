@@ -32,3 +32,25 @@ exports.register = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.Login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const loginuser = await user.findOne({ where: { EMAIL: email } });
+
+    if (!loginuser) {
+      return res.status(401).json({ message: "Invalid Email or Password" });
+    }
+    
+    const passwordMatch = await bcrypt.compare(password, loginuser.PASSWORD);
+
+    if (passwordMatch) {
+      res.status(200).json({ message: "Login Successful" });
+    } else {
+      res.status(401).json({ message: "Invalid email or password" });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
