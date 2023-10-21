@@ -2,7 +2,7 @@
 CREATE TABLE User(
     ID INT PRIMARY KEY AUTO_INCREMENT,
     EMAIL VARCHAR(255) NOT NULL UNIQUE,
-    UNAME VARCHAR(255) NOT NULL ,
+    UNAME VARCHAR(255) NOT NULL UNIQUE,
     PASSWORD VARCHAR(255) NOT NULL 
 );
 --@block
@@ -10,4 +10,8 @@ INSERT INTO User (EMAIL,UNAME,PASSWORD)
 VALUES('jeraponteesup@gmail.com','EarthChaotic','earth2102')
 
 --@block
-DROP TABLE User;
+DELETE FROM User;
+--@block
+DELETE FROM FriendRequests;
+--@block
+DELETE FROM Friends;

@@ -1,4 +1,4 @@
-module.exports = (sequelize,Sequelize) => {
+module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define(
     "User",
     {
@@ -10,6 +10,7 @@ module.exports = (sequelize,Sequelize) => {
       UNAME: {
         type: Sequelize.STRING(255),
         allowNull: false,
+        unique: true,
       },
       PASSWORD: {
         type: Sequelize.STRING(255),
@@ -17,8 +18,8 @@ module.exports = (sequelize,Sequelize) => {
       },
     },
     {
-      tableName: "User"
+      tableName: "User",
     }
-  )
-  return User
-}
+  );
+  return User;
+};

@@ -18,13 +18,27 @@
     <div>
       <div class="row">
         <div class="col p-3">
-          <button class="button">Home</button><br>
-          <button class="button">Friends</button>
+          <button>Home</button><br />
+          <button>Friends</button>
         </div>
-        <div class="col-10 p-3 right-column">
+        <div class="col-10 p-3">
           <button>All</button>
           <button>Pending</button>
-          <a href="addfriend.html"><button>Add Friend</button></a>
+          <button>Add Friend</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col p-3"></div>
+        <div class="col-10">
+          <h6>ADD FRIEND</h6>
+          <p>You can add friends with thier username.</p>
+          <div class="input-group mb-3">
+            <input
+              id="Receiver"
+              placeholder="You can add friends with thier username."
+            />
+            <button onclick="sendFriendRequest()">ADD FRIEND</button>
+          </div>
         </div>
       </div>
     </div>
