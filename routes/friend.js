@@ -4,8 +4,10 @@ const friendController = require("../controllers/friendContoller");
 
 router.post("/send", friendController.sendFriendRequest);
 router.get("/pending", friendController.PendingRequests);
-router.post("/pendingname",friendController.PendingUsernames);
-router.get("/incoming",friendController.IncomingRequests)
-router.post("/incomingname",friendController.incomingUsernames)
+router.post("/pendingname", friendController.PendingUsernames);
+router.get("/incoming", friendController.IncomingRequests);
+router.post("/incomingname", friendController.incomingUsernames);
+router.put("/accept", friendController.AcceptRequest);
+router.put("/decline", friendController.DeclineRequest);
 
 module.exports = router;

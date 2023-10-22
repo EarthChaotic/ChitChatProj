@@ -14,4 +14,4 @@ DELETE FROM User;
 --@block
 DELETE FROM FriendRequests;
 --@block
-DELETE FROM Friends;
+DROP TABLE

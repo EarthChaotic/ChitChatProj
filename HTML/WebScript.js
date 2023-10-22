@@ -101,37 +101,37 @@ async function sendFriendRequest() {
 
 async function fetchPendingUsernames() {
   try {
-    let email = sessionStorage.getItem('email')
+    let email = sessionStorage.getItem("email");
     const response = await fetch("http://localhost:3000/friend/pendingname", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email:email
+        email: email,
       }),
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     return [];
   }
 }
 
 async function displayPendingUsernames() {
-  const pendingUserContainer = document.getElementById('pendingUserContainer');
+  const pendingUserContainer = document.getElementById("pendingUserContainer");
   const pendingUsernames = await fetchPendingUsernames();
 
   // Clear the container before adding new elements (if needed)
-  pendingUserContainer.innerHTML = '';
+  pendingUserContainer.innerHTML = "";
 
   pendingUsernames.forEach((username) => {
-    const newUsernameBlock = document.createElement('div');
-    newUsernameBlock.className = 'input-group mb-3';
+    const newUsernameBlock = document.createElement("div");
+    newUsernameBlock.className = "input-group mb-3";
     newUsernameBlock.innerHTML = `
       <span>
         ${username}
@@ -144,47 +144,90 @@ async function displayPendingUsernames() {
 
 async function fetchIncomingUsernames() {
   try {
-    let email = sessionStorage.getItem('email')
+    let email = sessionStorage.getItem("email");
     const response = await fetch("http://localhost:3000/friend/incomingname", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email:email
+        email: email,
       }),
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     return [];
   }
 }
 
 async function displayIncomingUsernames() {
-  const incomingUserContainer = document.getElementById('incomingUserContainer');
+  const incomingUserContainer = document.getElementById(
+    "incomingUserContainer"
+  );
   const incomingUsernames = await fetchIncomingUsernames();
 
   // Clear the container before adding new elements (if needed)
-  incomingUserContainer.innerHTML = '';
+  incomingUserContainer.innerHTML = "";
 
   incomingUsernames.forEach((username) => {
-    const newUsernameBlock = document.createElement('div');
-    newUsernameBlock.className = 'input-group mb-3';
+    const newUsernameBlock = document.createElement("div");
+    newUsernameBlock.className = "input-group mb-3";
     newUsernameBlock.innerHTML = `
       <span>
+      <label id="sender">
         ${username}
-        <button class="button">Accept</button>
-        <button class="button">Decline</button>
+      </label>
+        <button class="button" onclick="Accept()">Accept</button>
+        <button class="button" onclick="Decline()">Decline</button>
       </span>
     `;
     incomingUserContainer.appendChild(newUsernameBlock);
   });
 }
 
-displayIncomingUsernames()
+async function Accept() {
+  const email = sessionStorage.getItem("email");
+  const sender = document.getElementById("sender").textContent.trim();
+
+  const response = await fetch("http://localhost:3000/friend/accept", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      senderuname: sender,
+    }),
+  });
+
+  if (response.ok) {
+    alert("Friend Request Accepted");
+  }
+}
+
+async function Decline() {
+  const email = sessionStorage.getItem("email");
+  const sender = document.getElementById("sender").textContent.trim();
+
+  const response = await fetch("http://localhost:3000/friend/decline", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      senderuname: sender,
+    }),
+  });
+  if (response.ok) {
+    alert("Friend Request Declined");
+  }
+}
+
+displayIncomingUsernames();
 displayPendingUsernames();

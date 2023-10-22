@@ -13,16 +13,53 @@ exports.sendFriendRequest = async (req, res, next) => {
         return res.status(400).json({ message: "User not found" });
       }
   
-      const existingRequest = await friendreq.findOne({
+      const existingRequest1 = await friendreq.findOne({
         where: {
           SenderId: sender.id,
           ReceiverId: receiver.id,
+          status: "pending"
+        },
+      });
+      if (existingRequest1) {
+        return res.status(400).json({ message: "Friend request already sent" });
+      }
+      const existingRequest2 = await friendreq.findOne({
+        where: {
+          SenderId: receiver.id,
+          ReceiverId: sender.id,
+          status: "pending"
+        },
+      });
+      if (existingRequest2) {
+        return res.status(400).json({ message: "This user already sent you a friend request" });
+      }
+      //existingRequest
+
+      const alreadyfriend1 = await friendreq.findOne({
+        where: {
+          SenderId: sender.id,
+          ReceiverId: receiver.id,
+          status: "accepted"
         },
       });
   
-      if (existingRequest) {
-        return res.status(400).json({ message: "Friend request already sent" });
+      if (alreadyfriend1) {
+        return res.status(400).json({ message: "You are already Friend with that user" });
       }
+
+      const alreadyfriend2 = await friendreq.findOne({
+        where: {
+          SenderId: receiver.id,
+          ReceiverId: sender.id,
+          status: "accepted"
+        },
+      });
+  
+      if (alreadyfriend2) {
+        return res.status(400).json({ message: "You are already Friend with that user" });
+      }
+      //alreadyFriend
+
   
       await friendreq.create({
         SenderId: sender.id,
@@ -119,6 +156,78 @@ exports.sendFriendRequest = async (req, res, next) => {
       }
   
       res.status(200).json(incomingUsernames);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  exports.AcceptRequest = async (req, res, next) => {
+    try {
+      const { email, senderuname } = req.body;
+  
+      const currentUser = await user.findOne({ where: { EMAIL: email } });
+  
+      if (!currentUser) {
+        return res.status(400).json({ message: "User not found" });
+      }
+  
+      const sender = await user.findOne({ where: { UNAME: senderuname } });
+  
+      if (!sender) {
+        return res.status(400).json({ message: "Sender not found" });
+      }
+  
+      const existingRequest = await friendreq.findOne({
+        where: {
+          SenderId: sender.id,
+          ReceiverId: currentUser.id,
+          status: "pending",
+        },
+      });
+  
+      if (!existingRequest) {
+        return res.status(400).json({ message: "Friend request not found" });
+      }
+  
+      await existingRequest.update({ status: "accepted" });
+  
+      res.status(200).json({ message: "Friend request accepted" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  exports.DeclineRequest = async (req, res, next) => {
+    try {
+      const { email, senderuname } = req.body;
+  
+      const currentUser = await user.findOne({ where: { EMAIL: email } });
+  
+      if (!currentUser) {
+        return res.status(400).json({ message: "User not found" });
+      }
+  
+      const sender = await user.findOne({ where: { UNAME: senderuname } });
+  
+      if (!sender) {
+        return res.status(400).json({ message: "Sender not found" });
+      }
+  
+      const existingRequest = await friendreq.findOne({
+        where: {
+          SenderId: sender.id,
+          ReceiverId: currentUser.id,
+          status: "pending",
+        },
+      });
+  
+      if (!existingRequest) {
+        return res.status(400).json({ message: "Friend request not found" });
+      }
+  
+      await existingRequest.update({ status: "rejected" });
+  
+      res.status(200).json({ message: "Friend request declined" });
     } catch (error) {
       next(error);
     }
