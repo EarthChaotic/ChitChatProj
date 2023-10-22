@@ -1,5 +1,5 @@
 const db = require("../database/index");
-const { friendreq, user } = db;
+const { user } = db;
 const bcrypt = require("bcrypt");
 
 exports.register = async (req, res, next) => {
@@ -14,7 +14,9 @@ exports.register = async (req, res, next) => {
     const dupeemail = await user.findOne({ where: { EMAIL: email } });
 
     if (dupeuname) {
-      return res.status(400).json({ message: "Username has already been taken" });
+      return res
+        .status(400)
+        .json({ message: "Username has already been taken" });
     }
     if (dupeemail) {
       return res.status(400).json({ message: "Email has already been taken" });
@@ -63,39 +65,5 @@ exports.CurrentUser = async (req, res, next) => {
     res.json(currentuser.UNAME);
   } catch (error) {
     throw error;
-  }
-};
-
-exports.sendFriendRequest = async (req, res, next) => {
-  try {
-    const { senderuname, receiveruname } = req.body;
-
-    const sender = await user.findOne({ where: { UNAME: senderuname } });
-    const receiver = await user.findOne({ where: { UNAME: receiveruname } });
-
-    if (!sender || !receiver || sender.UNAME == receiver.UNAME) {
-      return res.status(400).json({ message: "User not found" });
-    }
-
-    const existingRequest = await friendreq.findOne({
-      where: {
-        SenderId: sender.id,
-        ReceiverId: receiver.id,
-      },
-    });
-
-    if (existingRequest) {
-      return res.status(400).json({ message: "Friend request already sent" });
-    }
-
-    await friendreq.create({
-      SenderId: sender.id,
-      ReceiverId: receiver.id,
-      status: "pending",
-    });
-
-    res.status(201).json({ message: "Friend request sent" });
-  } catch (error) {
-    next(error);
   }
 };

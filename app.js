@@ -4,6 +4,7 @@ const app = express();
 const PORT = 3000;
 
 var userRouter = require('./routes/users');
+var friendRouter = require('./routes/friend')
 
 const db = require("./database/index")
 db.sequelize.sync();
@@ -17,4 +18,5 @@ app.listen(PORT, () => {
 app.use(cors());
 app.use(express.json());
 app.use('/users',userRouter);
+app.use('/friend',friendRouter)
 //API Goes Here
