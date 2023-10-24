@@ -102,7 +102,7 @@ async function sendFriendRequest() {
 async function fetchPendingUsernames() {
   try {
     let email = sessionStorage.getItem("email");
-    const response = await fetch("http://localhost:3000/friend/pendingname", {
+    const response = await fetch("http://localhost:3000/friend/pending", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -145,7 +145,7 @@ async function displayPendingUsernames() {
 async function fetchIncomingUsernames() {
   try {
     let email = sessionStorage.getItem("email");
-    const response = await fetch("http://localhost:3000/friend/incomingname", {
+    const response = await fetch("http://localhost:3000/friend/incoming", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -229,5 +229,103 @@ async function Decline() {
   }
 }
 
+async function fetchincFriendlist(){
+  try{
+    let email = sessionStorage.getItem("email");
+    const response = await fetch("http://localhost:3000/friend/incfriendlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+async function displayincfriendlist() {
+  const incfriendlistcontainer = document.getElementById(
+    "incfriendlistcontainer"
+  );
+  const incfriendUsernames = await fetchincFriendlist();
+
+  // Clear the container before adding new elements (if needed)
+  incfriendlistcontainer.innerHTML = "";
+
+  incfriendUsernames.forEach((username) => {
+    const newUsernameBlock = document.createElement("div");
+    newUsernameBlock.className = "input-group mb-3";
+    newUsernameBlock.innerHTML = `
+      <span>
+      <label id="sender">
+        ${username}
+      </label>
+        <button class="button" onclick="">MSG</button>
+      </span>
+    `;
+    incfriendlistcontainer.appendChild(newUsernameBlock);
+  });
+}
+
+async function fetchpenFriendlist(){
+  try{
+    let email = sessionStorage.getItem("email");
+    const response = await fetch("http://localhost:3000/friend/penfriendlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+async function displaypenfriendlist() {
+  const penfriendlistcontainer = document.getElementById(
+    "penfriendlistcontainer"
+  );
+  const penfriendUsernames = await fetchpenFriendlist();
+
+  // Clear the container before adding new elements (if needed)
+  penfriendlistcontainer.innerHTML = "";
+
+  penfriendUsernames.forEach((username) => {
+    const newUsernameBlock = document.createElement("div");
+    newUsernameBlock.className = "input-group mb-3";
+    newUsernameBlock.innerHTML = `
+      <span>
+      <label id="sender">
+        ${username}
+      </label>
+        <button class="button">MSG</button>
+      </span>
+    `;
+    penfriendlistcontainer.appendChild(newUsernameBlock);
+  });
+}
+
+displayincfriendlist()
+displaypenfriendlist()
 displayIncomingUsernames();
 displayPendingUsernames();

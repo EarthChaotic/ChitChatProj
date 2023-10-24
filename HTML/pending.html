@@ -12,34 +12,27 @@
     />
     <link rel="stylesheet" href="discord.css" />
 
-    <title>Hello, world!</title>
+    <title>ChickChat | Friends</title>
   </head>
   <body>
     <div>
       <div class="row">
         <div class="col p-3">
-          <button>Home</button><br />
-          <button>Friends</button>
+          <a href="main.html"><button>Home</button><br /></a>
+          <a href="allfriend.html"><button class="">Friends</button></a>
         </div>
         <div class="col-10 p-3">
-          <button>All</button>
+          <a href="allfriend.html"><button class="">All</button></a>
           <a href="pending.html"><button>Pending</button></a>
           <a href="addfriend.html"><button>Add Friend</button></a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col"></div>
-        <div class="col-10" id="incomingUserContainer">
-          <!-- New incoming username blocks will be appended here -->
-        </div>
-      </div>
-      <div class="row">
-        <div class="col"></div>
-        <div class="col-10" id="pendingUserContainer">
-          <!-- New pending username blocks will be appended here -->
+          <div class="col-10 mt-3" id="incomingUserContainer">
+          </div>
+          <div class="col-10" id="pendingUserContainer">
+          </div>
         </div>
       </div>
     </div>
   </body>
-  <script src="WebScript.js"></script>
+  <script src="WebScript.js">
+  </script>
 </html>

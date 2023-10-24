@@ -3,11 +3,11 @@ var router = express.Router();
 const friendController = require("../controllers/friendContoller");
 
 router.post("/send", friendController.sendFriendRequest);
-router.get("/pending", friendController.PendingRequests);
-router.post("/pendingname", friendController.PendingUsernames);
-router.get("/incoming", friendController.IncomingRequests);
-router.post("/incomingname", friendController.incomingUsernames);
+router.post("/pending", friendController.Pending);
+router.post("/incoming", friendController.Incoming);
 router.put("/accept", friendController.AcceptRequest);
 router.put("/decline", friendController.DeclineRequest);
+router.post("/incfriendlist", friendController.IncomingAccepted);
+router.post("/penfriendlist", friendController.PendingAccepted);
 
 module.exports = router;
