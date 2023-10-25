@@ -9,5 +9,6 @@ router.put("/accept", friendController.AcceptRequest);
 router.put("/decline", friendController.DeclineRequest);
 router.post("/incfriendlist", friendController.IncomingAccepted);
 router.post("/penfriendlist", friendController.PendingAccepted);
+router.delete("/cancel",friendController.CancelRequest);
 
 module.exports = router;

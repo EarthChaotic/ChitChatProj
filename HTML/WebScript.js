@@ -134,8 +134,10 @@ async function displayPendingUsernames() {
     newUsernameBlock.className = "input-group mb-3";
     newUsernameBlock.innerHTML = `
       <span>
+      <label id="receiver">
         ${username}
-        <button class="button">Cancel</button>
+        </label>
+        <button class="button" onclick="Cancel()">Cancel</button>
       </span>
     `;
     pendingUserContainer.appendChild(newUsernameBlock);
@@ -229,8 +231,8 @@ async function Decline() {
   }
 }
 
-async function fetchincFriendlist(){
-  try{
+async function fetchincFriendlist() {
+  try {
     let email = sessionStorage.getItem("email");
     const response = await fetch("http://localhost:3000/friend/incfriendlist", {
       method: "POST",
@@ -247,8 +249,7 @@ async function fetchincFriendlist(){
     }
     const data = await response.json();
     return data;
-
-  }catch(error){
+  } catch (error) {
     console.error(error);
   }
 }
@@ -277,8 +278,8 @@ async function displayincfriendlist() {
   });
 }
 
-async function fetchpenFriendlist(){
-  try{
+async function fetchpenFriendlist() {
+  try {
     let email = sessionStorage.getItem("email");
     const response = await fetch("http://localhost:3000/friend/penfriendlist", {
       method: "POST",
@@ -295,8 +296,7 @@ async function fetchpenFriendlist(){
     }
     const data = await response.json();
     return data;
-
-  }catch(error){
+  } catch (error) {
     console.error(error);
   }
 }
@@ -325,7 +325,27 @@ async function displaypenfriendlist() {
   });
 }
 
-displayincfriendlist()
-displaypenfriendlist()
+async function Cancel(){
+
+  const email = sessionStorage.getItem("email");
+  const receiver = document.getElementById("receiver").textContent.trim();
+
+  const response = await fetch("http://localhost:3000/friend/cancel", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      receiver: receiver,
+    }),
+  });
+  if (response.ok) {
+    alert("Friend Request Cancel");
+  }
+}
+
+displayincfriendlist();
+displaypenfriendlist();
 displayIncomingUsernames();
 displayPendingUsernames();

@@ -255,3 +255,22 @@ exports.PendingAccepted = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.CancelRequest = async (req, res, next) => {
+  try {
+    const { email, receiver } = req.body;
+    const currentUser = await user.findOne({ where: { EMAIL: email } });
+    const recieveuser = await user.findOne({ where: { UNAME: receiver } });
+
+    const cancelreq = await friendreq.destroy({
+      where: {
+        SenderId: currentUser.id,
+        ReceiverID: recieveuser.id,
+        status: "pending",
+      },
+    });
+    res.status(200).json({ message: "Friend request canceled" });
+  } catch (error) {
+    next(error);
+  }
+};
