@@ -126,7 +126,6 @@ async function displayPendingUsernames() {
   const pendingUserContainer = document.getElementById("pendingUserContainer");
   const pendingUsernames = await fetchPendingUsernames();
 
-  // Clear the container before adding new elements (if needed)
   pendingUserContainer.innerHTML = "";
 
   pendingUsernames.forEach((username) => {
@@ -173,7 +172,6 @@ async function displayIncomingUsernames() {
   );
   const incomingUsernames = await fetchIncomingUsernames();
 
-  // Clear the container before adding new elements (if needed)
   incomingUserContainer.innerHTML = "";
 
   incomingUsernames.forEach((username) => {
@@ -260,7 +258,6 @@ async function displayincfriendlist() {
   );
   const incfriendUsernames = await fetchincFriendlist();
 
-  // Clear the container before adding new elements (if needed)
   incfriendlistcontainer.innerHTML = "";
 
   incfriendUsernames.forEach((username) => {
@@ -307,7 +304,6 @@ async function displaypenfriendlist() {
   );
   const penfriendUsernames = await fetchpenFriendlist();
 
-  // Clear the container before adding new elements (if needed)
   penfriendlistcontainer.innerHTML = "";
 
   penfriendUsernames.forEach((username) => {
@@ -325,8 +321,7 @@ async function displaypenfriendlist() {
   });
 }
 
-async function Cancel(){
-
+async function Cancel() {
   const email = sessionStorage.getItem("email");
   const receiver = document.getElementById("receiver").textContent.trim();
 

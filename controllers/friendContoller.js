@@ -1,6 +1,5 @@
 const db = require("../database/index");
 const { friendreq, user } = db;
-const bcrypt = require("bcrypt");
 
 exports.sendFriendRequest = async (req, res, next) => {
   try {
@@ -23,6 +22,7 @@ exports.sendFriendRequest = async (req, res, next) => {
     if (existingRequest1) {
       return res.status(400).json({ message: "Friend request already sent" });
     }
+
     const existingRequest2 = await friendreq.findOne({
       where: {
         SenderId: receiver.id,
@@ -262,7 +262,7 @@ exports.CancelRequest = async (req, res, next) => {
     const currentUser = await user.findOne({ where: { EMAIL: email } });
     const recieveuser = await user.findOne({ where: { UNAME: receiver } });
 
-    const cancelreq = await friendreq.destroy({
+    await friendreq.destroy({
       where: {
         SenderId: currentUser.id,
         ReceiverID: recieveuser.id,
