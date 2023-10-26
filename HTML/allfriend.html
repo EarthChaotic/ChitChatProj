@@ -18,23 +18,121 @@
     <div>
       <div class="row">
         <div class="col p-3">
-          <a href="main.html"><button>Home</button></a><br/>
+          <a href="main.html"><button>Home</button></a><br />
           <a href="allfriend.html"><button class="">Friends</button></a>
         </div>
         <div class="col-10 p-3">
           <a href="allfriend.html"><button class="">All</button></a>
-          <a href="pending.html"><button >Pending</button></a>
+          <a href="pending.html"><button>Pending</button></a>
           <a href="addfriend.html"><button>Add Friend</button></a>
           <h6>FRIEND LIST</h6>
-          <div class="col-10 mt-3" id="incfriendlistcontainer">
-          </div>
-          <div class="col-10 mt-3" id="penfriendlistcontainer">
-          </div>
+          <div class="col-10 mt-3" id="incfriendlistcontainer"></div>
+          <div class="col-10 mt-3" id="penfriendlistcontainer"></div>
         </div>
-      </div>
       </div>
     </div>
   </body>
-  <script src="WebScript.js">
+  <script src="WebScript.js"></script>
+  <script>
+    async function fetchincFriendlist() {
+      try {
+        let email = sessionStorage.getItem("email");
+        const response = await fetch(
+          "http://localhost:3000/friend/incfriendlist",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function displayincfriendlist() {
+      const incfriendlistcontainer = document.getElementById(
+        "incfriendlistcontainer"
+      );
+      const incfriendUsernames = await fetchincFriendlist();
+
+      incfriendlistcontainer.innerHTML = "";
+
+      incfriendUsernames.forEach((username) => {
+        const newUsernameBlock = document.createElement("div");
+        newUsernameBlock.className = "input-group mb-3";
+        newUsernameBlock.innerHTML = `
+      <span>
+      <label id="sender">
+        ${username}
+      </label>
+      <a href="http://localhost:3000"><button class="button">MSG</button></a>
+      </span>
+    `;
+        incfriendlistcontainer.appendChild(newUsernameBlock);
+      });
+    }
+
+    async function fetchpenFriendlist() {
+      try {
+        let email = sessionStorage.getItem("email");
+        const response = await fetch(
+          "http://localhost:3000/friend/penfriendlist",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function displaypenfriendlist() {
+      const penfriendlistcontainer = document.getElementById(
+        "penfriendlistcontainer"
+      );
+      const penfriendUsernames = await fetchpenFriendlist();
+
+      penfriendlistcontainer.innerHTML = "";
+
+      penfriendUsernames.forEach((username) => {
+        const newUsernameBlock = document.createElement("div");
+        newUsernameBlock.className = "input-group mb-3";
+        newUsernameBlock.innerHTML = `
+      <span>
+      <label id="sender">
+        ${username}
+      </label>
+        <a href="http://localhost:3000"><button class="button">MSG</button></a>
+      </span>
+    `;
+        penfriendlistcontainer.appendChild(newUsernameBlock);
+      });
+    }
+
+    displayincfriendlist();
+    displaypenfriendlist();
   </script>
 </html>

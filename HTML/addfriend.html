@@ -39,4 +39,32 @@
     </div>
   </body>
   <script src="WebScript.js"></script>
+  <script>
+    async function sendFriendRequest() {
+      try {
+        const sender = await getCurrentUsername();
+        const receiver = document.getElementById("Receiver").value;
+
+        const response = await fetch("http://localhost:3000/friend/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            senderuname: sender,
+            receiveruname: receiver,
+          }),
+        });
+
+        if (response.status === 400) {
+          const data = await response.json();
+          alert(data.message);
+        } else if (response.ok) {
+          alert("Friend request sent!");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  </script>
 </html>

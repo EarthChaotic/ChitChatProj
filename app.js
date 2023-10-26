@@ -10,7 +10,28 @@ const db = require("./database/index");
 db.sequelize.sync();
 //Import and Declare
 
-app.listen(PORT, () => {
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/HTML/DM.html");
+});
+
+
+io.on('connection', (socket) => {
+  socket.on('join room', (roomName) => {
+    socket.join(roomName);
+  });
+
+  socket.on('private message', (data) => {
+    io.to(data.roomName).emit('chat message', data.message);
+  });
+});
+//Socket.IO
+
+server.listen(PORT, () => {
   console.log(`Server Running on http://localhost:${PORT}`);
 });
 //Check if API Is Up

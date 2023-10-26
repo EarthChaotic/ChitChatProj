@@ -32,4 +32,101 @@
     </div>
   </body>
   <script src="WebScript.js"></script>
+  <script>
+    async function fetchPendingUsernames() {
+      try {
+        let email = sessionStorage.getItem("email");
+        const response = await fetch("http://localhost:3000/friend/pending", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
+      }
+    }
+
+    async function displayPendingUsernames() {
+      const pendingUserContainer = document.getElementById(
+        "pendingUserContainer"
+      );
+      const pendingUsernames = await fetchPendingUsernames();
+
+      pendingUserContainer.innerHTML = "";
+
+      pendingUsernames.forEach((username) => {
+        const newUsernameBlock = document.createElement("div");
+        newUsernameBlock.className = "input-group mb-3";
+        newUsernameBlock.innerHTML = `
+          <span>
+          <label id="receiver">
+            ${username}
+            </label>
+            <button class="button" onclick="Cancel()">Cancel</button>
+          </span>
+        `;
+        pendingUserContainer.appendChild(newUsernameBlock);
+      });
+    }
+
+    async function fetchIncomingUsernames() {
+      try {
+        let email = sessionStorage.getItem("email");
+        const response = await fetch("http://localhost:3000/friend/incoming", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
+      }
+    }
+
+    async function displayIncomingUsernames() {
+      const incomingUserContainer = document.getElementById(
+        "incomingUserContainer"
+      );
+      const incomingUsernames = await fetchIncomingUsernames();
+
+      incomingUserContainer.innerHTML = "";
+
+      incomingUsernames.forEach((username) => {
+        const newUsernameBlock = document.createElement("div");
+        newUsernameBlock.className = "input-group mb-3";
+        newUsernameBlock.innerHTML = `
+          <span>
+          <label id="sender">
+            ${username}
+          </label>
+            <button class="button" onclick="Accept()">Accept</button>
+            <button class="button" onclick="Decline()">Decline</button>
+          </span>
+        `;
+        incomingUserContainer.appendChild(newUsernameBlock);
+      });
+    }
+
+    displayIncomingUsernames();
+    displayPendingUsernames();
+  </script>
 </html>
