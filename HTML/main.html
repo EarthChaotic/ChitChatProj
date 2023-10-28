@@ -25,5 +25,8 @@
       </div>
     </div>
   </body>
-  <script src="WebScript.js"></script>
+  <script src="WebScript.js">
+    const CurrentUsername = getCurrentUsername()
+    sessionStorage.setItem("CurrentUsername",CurrentUsername);
+  </script>
 </html>
